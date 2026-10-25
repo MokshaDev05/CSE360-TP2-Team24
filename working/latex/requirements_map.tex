@@ -1,0 +1,105 @@
+\documentclass[10pt]{article}
+\usepackage{tp2style}
+\hypersetup{pdftitle={Requirements to Tests Map},pdfauthor={CSE 360 Team 24}}
+\fancyfoot[L]{\sffamily\scriptsize\color{muted}Requirements to Tests Map \textperiodcentered{} Team 24}
+\input{map_counts}
+
+\begin{document}
+\doctitle{Requirements to Tests Map}{\team \\ First issued October 22, 2026; this revision October 25, 2026}
+
+\section*{What this map covers}
+CS-1 to CS-12 are the Contributor user stories split into requirements that can each be tested
+on their own (agreed by the team on October 13). Every requirement has at least one positive
+test, showing it is met for valid use, and at least one negative test, showing incorrect use is
+refused or explained. There are \ntotal{} tests: \nauto{} semi-automated tests in four suites,
+run together by \texttt{TP2TestRunner}, and \nman{} manual procedures (MAN) for what only a
+window can show. Every test is one method; its Javadoc states the requirement, how the test
+works, and what output means a pass. The HTML pages and screenshots named here are in the
+\texttt{ContributorTests\_Javadocs} folder.
+
+\subsection*{How to run the tests}
+\begin{tabularx}{\linewidth}{@{}l X@{}}
+Automated & Run \texttt{testingAutomation.TP2TestRunner} (Eclipse: Run As, Java Application, with
+  the JavaFX module path and the H2 jar as for \texttt{FoundationsMain}). Each test prints one line
+  starting \texttt{Pass:} or \texttt{Failure:} followed by its id and requirement; the last line is
+  \texttt{RESULT: every test behaved as expected} only when nothing failed. \\
+Manual & Run \texttt{testingAutomation.LessonsManualTestProcedures} beside a running
+  \texttt{FoundationsMain}. It prints each procedure's steps and expected result and records
+  P, F, or S for each. \\
+\end{tabularx}
+
+\section*{Requirements and their tests}
+\begin{small}
+\input{map_requirements}
+\end{small}
+
+\section*{Every test, its Javadoc, and its screenshot}
+The anchor is the method name inside the HTML page: \texttt{\#crud01CreateValidLesson()} in
+\texttt{LessonsCrudTestingAutomation.html} opens that test's Javadoc. CRUD-11 and CRUD-12, and CRUD-13 and CRUD-14, share one method because
+the negative test checks the database the positive test reopened.
+
+\begin{small}
+\input{map_tests}
+\end{small}
+
+\subsection*{Other screenshots in ContributorTests\_Javadocs}
+\begin{tabularx}{\linewidth}{@{}l X@{}}
+\toprule
+\textbf{Screenshot} & \textbf{Shows} \\
+\midrule
+\texttt{7.4-<suite>-class-javadoc.png} (five) & Each suite's class Javadoc: requirements covered, test data, how to read the output \\
+\texttt{7.4-TP2TestRunner-class-javadoc.png}, \texttt{-main.png} & What each suite covers; how the totals are added \\
+\texttt{7.4-check-helper-and-refusedWith.png} & How a Pass or Failure line is produced; why a negative test checks the refusal message \\
+\texttt{7.4-TP2TestRunner-output-1} to \texttt{-5} & The console output of a real run, one image per suite and one for the totals \\
+\bottomrule
+\end{tabularx}
+
+\section*{Latest run}
+October 25, 2026, on the submitted source:
+
+\begin{tabularx}{\linewidth}{@{}X r r r@{}}
+\toprule
+\textbf{Suite} & \textbf{Tests} & \textbf{Passed} & \textbf{Failed} \\
+\midrule
+LessonValidationTestingAutomation (VAL) & 25 & 25 & 0 \\
+LessonsCrudTestingAutomation (CRUD) & 14 & 14 & 0 \\
+LessonsListTestingAutomation (LIST) & 13 & 13 & 0 \\
+LessonsModelTestingAutomation (MOD) & 20 & 20 & 0 \\
+\midrule
+\textbf{Total, automated} & \textbf{72} & \textbf{72} & \textbf{0} \\
+\bottomrule
+\end{tabularx}
+
+To check that the tests can fail, three defects were put into a copy of the code: the HW2-table
+fix removed, keywords dropped from the search, and the list order reversed. The run then reported
+six failures (CRUD-13, CRUD-14, LIST-03, LIST-11, LIST-12, MOD-05) and no false passes.
+
+The manual procedures are carried out during the TestingScreencast; their results are recorded
+there.
+
+\section*{Iteration notes (Task 6)}
+\begin{tabularx}{\linewidth}{@{}l X@{}}
+\toprule
+\textbf{Date} & \textbf{What the tests found, and what changed} \\
+\midrule
+Oct 14 & VAL-12 (a 300-character description) failed on its first run. \texttt{InputLimits.checkLength}
+  stops at 256 characters, so every description from 257 to 2000 was refused. Added
+  \texttt{LessonInputPolicy.checkLongText} for description and resolution. \\
+Oct 19 & First CRUD run: 10 of 12. CRUD-02 and CRUD-06 failed because \texttt{create} and \texttt{update}
+  wrote the row without acting on \texttt{validate}'s result. Both now return the problem and write
+  nothing. \\
+Oct 22 & First GUI Model run: MOD-04 failed. \texttt{statusMessage} said nothing matched when only
+  ``Only my lessons'' was ticked; the branch for that case now comes first. Full run: 63 of 63. \\
+Oct 25 & Review before submission. (1) Saving over the \texttt{lessonsLearned} table left by an HW2
+  version (columns author, body, tags) failed with ``Column DESCRIPTION not found'', and the list
+  showed nothing. \texttt{LessonsLearnedDatabase} now renames such a table to
+  \texttt{lessonsLearnedHW2Legacy}, keeping its rows; CRUD-13 and CRUD-14 added. (2) CRUD-11 and
+  CRUD-12 only counted rows in an in-memory database, which cannot show persistence; they now close
+  and reopen a database file. (3) Each test became its own documented method; negative validation
+  tests now check the refusal message. (4) Added LIST-11 to LIST-13 (order, case, empty term),
+  MOD-17 to MOD-20 (no-match messages, editing someone else's lesson), and MAN-01 to MAN-07.
+  Result: 72 of 72. \\
+\bottomrule
+\end{tabularx}
+
+\end{document}

@@ -1,0 +1,16 @@
+# Build output and the submission archive (rebuilt from TP2/ before each upload)
+TP2.zip
+bin/
+*.class
+
+# LaTeX intermediates
+working/latex/*.aux
+working/latex/*.log
+working/latex/*.out
+working/latex/*.fls
+working/latex/*.fdb_latexmk
+working/latex/*.synctex.gz
+
+# Python and OS clutter
+__pycache__/
+.DS_Store

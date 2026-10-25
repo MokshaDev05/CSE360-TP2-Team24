@@ -1,0 +1,311 @@
+\documentclass[11pt]{article}
+\usepackage{tp2style}
+\hypersetup{pdftitle={AICoaching},pdfauthor={CSE 360 Team 24}}
+\fancyfoot[L]{\sffamily\scriptsize\color{muted}AICoaching \textperiodcentered{} Team 24}
+
+% ---------------------------------------------------------------------------------------
+% GUI mockup of one editor field with its coaching panel, drawn to match ViewLessonEditor:
+% label above the control, character counter at the right, one filled button.
+% \mockup{label}{counter}{typed text}{button}{panel heading}{panel text}{action 1}{action 2}{height}
+% ---------------------------------------------------------------------------------------
+\newcommand{\mockup}[9]{%
+\begin{center}
+\begin{tikzpicture}[font=\sffamily\footnotesize, x=1cm, y=1cm]
+  \draw[rulegray, fill=white, rounded corners=2pt] (0,0) rectangle (15.6,#9);
+  \fill[shade] (0,#9-0.55) rectangle (15.6,#9);
+  \draw[rulegray] (0,#9-0.55) -- (15.6,#9-0.55);
+  \node[anchor=west, text=muted] at (0.25,#9-0.28) {Lesson editor \textperiodcentered{} Edit Lesson \#12};
+  \node[anchor=west, font=\sffamily\footnotesize\bfseries] at (0.4,#9-0.95) {#1};
+  \node[anchor=east, text=muted] at (12.0,#9-0.95) {#2};
+  \draw[rulegray, fill=white] (0.4,#9-2.05) rectangle (12.0,#9-1.2);
+  \node[anchor=north west, text width=11.3cm, font=\ttfamily\footnotesize] at (0.5,#9-1.27) {#3};
+  \draw[accent, fill=accent, rounded corners=2pt] (12.3,#9-1.85) rectangle (15.2,#9-1.35);
+  \node[text=white, font=\sffamily\footnotesize\bfseries] at (13.75,#9-1.6) {#4};
+  \draw[accent!60, fill=accent!6, rounded corners=2pt] (0.4,0.3) rectangle (15.2,#9-2.3);
+  \node[anchor=north west, font=\sffamily\footnotesize\bfseries, text=accent] at (0.55,#9-2.4) {#5};
+  \node[anchor=north west, text width=10.9cm] at (0.55,#9-2.85) {#6};
+  \draw[accent, rounded corners=2pt] (11.9,0.5) rectangle (13.45,1.0);
+  \node[text=accent] at (12.675,0.75) {#7};
+  \draw[rulegray, rounded corners=2pt] (13.6,0.5) rectangle (15.05,1.0);
+  \node[text=muted] at (14.325,0.75) {#8};
+\end{tikzpicture}
+\end{center}}
+
+\newcommand{\fieldhead}[3]{\section{#1}\vspace{-4pt}{\sffamily\small\color{muted}Attribute
+  \code{#2} \textperiodcentered{} Owner: \textbf{#3}}\par}
+\newcommand{\req}[2]{\item[\textsf{\textbf{#1}}] #2}
+\newenvironment{reqs}{\begin{description}[leftmargin=6.4em,labelwidth=6em,labelsep=0.4em,style=sameline,itemsep=1pt,font=\normalfont]}{\end{description}}
+\newcommand{\toolbox}[2]{\par\smallskip\begin{tabularx}{\linewidth}{@{}>{\sffamily\bfseries\small}l X@{}}
+  \toprule #1 \bottomrule\end{tabularx}\par}
+
+\begin{document}
+
+\doctitle{AICoaching}{\team \\ October 19, 2026; revised October 25, 2026}
+
+\section*{Purpose}
+TP1 built validation: a lesson field is refused when it is missing, too long, or badly formed.
+Coaching is a second layer that runs only after a field has passed validation. It accepts the
+input and then advises the contributor how to make the lesson more useful to the people who will
+search for it later: spelling, specificity, whether the fix is actually stated, and whether the
+keywords and category match what other lessons use.
+
+This plan comes from each member's HW2 evaluation of LessonShare. LessonShare showed four AI
+functions worth adopting (an interview that asks one follow-up question at a time, takeaway
+extraction, a writing coach, and a one-line summary) and one obligation that comes with them: a
+consent step before any text leaves the application. The five fields below are the five a
+contributor types into the TP2 lesson editor; the sixth attribute the editor stores,
+\code{contributor}, is taken from the login and is never typed, so it needs no coaching.
+
+\section*{Prioritized list of coached input fields}
+Priority reflects how much a weak value in the field reduces the value of a stored lesson to a
+later reader.
+
+\begin{tabularx}{\linewidth}{@{}c l X l l@{}}
+\toprule
+\textbf{\#} & \textbf{Field} & \textbf{What goes wrong without coaching} & \textbf{Owner} & \textbf{Primary tool} \\
+\midrule
+1 & Description & The field readers rely on most. Misspellings defeat the search, and a vague
+  description (``it broke'') records that something happened but not what. & Arush Ugal & LanguageTool \\
+2 & Resolution & A missing or one-line resolution (``fixed it'') leaves the reader with the
+  problem and no fix. & Moksha Dev & Apache OpenNLP \\
+3 & Title & A generic title (``Bug fix'') is useless in a list of search results. & Karan Patel & Groq API \\
+4 & Keywords & Contributors choose different words for the same idea (``db'', ``database'',
+  ``H2''), so a keyword search misses lessons. & Anirudh B & KeyBERT \\
+5 & Category & Free-text categories fragment (``DB stuff'', ``Database'', ``Databases''), so the
+  category filter splits lessons that belong together. & Pranjal Ganvir & Sentence Transformers \\
+\bottomrule
+\end{tabularx}
+
+\medskip
+\textbf{Workload.} There are five fields and five members, so each member owns exactly one
+field: its mockup, concept of operations, requirements, tool evaluation, and, in TP3, its
+implementation and tests.
+
+\section*{Requirements that apply to every field}
+\begin{reqs}
+\req{C-1}{Coaching runs only after the field has passed LessonInputPolicy validation, and never
+  replaces it.}
+\req{C-2}{Coaching never blocks Save Lesson. Every suggestion can be dismissed.}
+\req{C-3}{The stored text changes only when the contributor presses Apply on a suggestion.}
+\req{C-4}{Before a field's text is sent to any service outside the application, the
+  contributor is told which service receives it and must agree once; the choice is recorded
+  with the account and can be withdrawn (LessonShare function 15).}
+\req{C-5}{If a coaching tool is unavailable or too slow (over 3 seconds), the editor works
+  exactly as it does without coaching and shows no error.}
+\req{C-6}{At most one suggestion per field is shown at a time.}
+\end{reqs}
+
+% =======================================================================================
+\fieldhead{Description}{description}{Arush Ugal}
+
+\mockup{Description}{58 / 2000}{the database throws an eror when two people open the app, it
+just says locked}{Check writing}{Writing check \textperiodcentered{} 2 suggestions}{1 of 2:
+``eror'' looks misspelled. Suggested: ``error''.\par\smallskip
+Then: the description does not say which error. Readers search for the exact message, e.g.
+``Database may be already in use''.}{Apply}{Dismiss}{5.6}
+
+\subsection*{Concept of operations}
+The contributor writes a description and presses Check writing. The text is checked by the
+LanguageTool library running inside the application, so nothing is sent anywhere. Spelling and
+grammar matches are shown one at a time, each with its replacement and an Apply button. After
+the language matches are handled, an optional second check, offered only to contributors who
+have given consent (C-4), sends the description to the same LLM writing coach LessonShare uses;
+it returns one sentence on what a reader would still need, for example the exact error message
+or the step that triggers the problem. Pressing Save Lesson at any point saves what is in the
+field.
+
+\subsection*{Prioritized requirements}
+\begin{reqs}
+\req{D-1 Must}{Detect misspelled words and offer LanguageTool's first replacement.}
+\req{D-2 Must}{Never send the description outside the application for spelling and grammar;
+  use the local library, not the public HTTP API.}
+\req{D-3 Should}{Detect grammar problems that change meaning (missing verb, wrong word) and
+  offer the replacement LanguageTool gives.}
+\req{D-4 Should}{Ignore technical terms already used as keywords in stored lessons (``JDBC'',
+  ``JavaFX''), so they are not reported as misspellings.}
+\req{D-5 Could}{With consent, ask the LLM writing coach for one sentence naming what is missing.}
+\end{reqs}
+
+\toolbox{
+Tool & \textbf{LanguageTool} (Java library \code{languagetool-core}), open source under
+LGPL-2.1, runs offline inside a Java application. \\
+Why & Java library, so it fits the Foundations code without a second runtime; local, so D-2
+holds. The public HTTP API is not used: it is limited to 20 requests per IP per minute and its
+terms ask that automated use run a private instance. \\
+Sources & Java API: \url{https://dev.languagetool.org/java-api} \newline
+Source and licence: \url{https://github.com/languagetool-org/languagetool} \newline
+HTTP API limits: \url{https://dev.languagetool.org/public-http-api} \\
+LessonShare & Function 12, AI writing coach (feedback on a draft without blocking the save),
+used for D-5. \\
+}
+
+% =======================================================================================
+\fieldhead{Resolution}{resolution}{Moksha Dev}
+
+\mockup{Resolution (optional)}{8 / 2000}{Fixed it.}{Check resolution}{Completeness check}{The
+resolution does not say what was done. A reader needs the action, for example: ``Add
+;AUTO\_SERVER=TRUE to the JDBC URL so a second program can open the database.''\par\smallskip
+Answer one question to fill it in: What did you change?}{Answer}{Dismiss}{5.4}
+
+\subsection*{Concept of operations}
+When the contributor leaves the Resolution field, or presses Check resolution, the text is split
+into sentences and tagged with parts of speech by Apache OpenNLP, locally. A resolution passes
+the completeness check when at least one sentence contains an action: a verb in base form at the
+start of a clause (``add'', ``set'', ``use'', ``restart'') or a past-tense verb with an object
+(``changed the URL''). A resolution with no action, such as ``Fixed it.'' or ``Works now.'',
+gets the panel above. An empty resolution is valid (the field is optional), so it gets no
+warning; instead the panel offers to ask one question, in the style of LessonShare's interview,
+when the lesson is next opened by its contributor.
+
+\subsection*{Prioritized requirements}
+\begin{reqs}
+\req{R-1 Must}{Report a non-empty resolution that contains no action, with an example of one.}
+\req{R-2 Must}{Do not report a resolution that contains an action, whatever its length.}
+\req{R-3 Should}{Do not warn about an empty resolution; offer the follow-up question instead.}
+\req{R-4 Should}{Once dismissed for a lesson, do not show the same panel again for that lesson
+  in the same session.}
+\req{R-5 Could}{With consent, let the contributor answer the follow-up question and draft a
+  resolution from the answer for them to edit.}
+\end{reqs}
+
+\toolbox{
+Tool & \textbf{Apache OpenNLP} with its pre-trained English sentence detector and
+part-of-speech models, Apache-2.0, pure Java, runs offline. \\
+Why & The check needs sentences and verb tags, not text generation; a local tagger answers it
+in milliseconds with no data leaving the application. \\
+Sources & Manual: \url{https://opennlp.apache.org/docs/} \newline
+Models: \url{https://opennlp.apache.org/models.html} \newline
+Source and licence: \url{https://github.com/apache/opennlp} \\
+LessonShare & Function 10, brainstorm interview (one focused follow-up question at a time),
+used for R-3 and R-5. \\
+}
+
+% =======================================================================================
+\fieldhead{Title}{title}{Karan Patel}
+
+\mockup{Title}{7 / 80}{Bug fix}{Improve title}{Title suggestion}{``Bug fix'' could be the title
+of any lesson. A title should name the symptom and the part involved. From your
+description:\par\smallskip
+\textbf{H2 database locked when a second program opens it}}{Apply}{Dismiss}{5.1}
+
+\subsection*{Concept of operations}
+The title is checked locally first: it is reported as generic when it has fewer than four words
+and every word is on a short list of generic terms (``bug'', ``fix'', ``error'', ``problem'',
+``issue'', ``help'', ``question''), or when it matches the title of an existing lesson
+exactly. For a generic title, and only with consent, the description is sent to an LLM through
+the Groq API with an instruction to return one title of at most 80 characters that names the
+symptom and the component. This is LessonShare's one-line summary used as a title generator. The
+suggestion is shown with Apply; it is checked against the 80-character limit before it is
+offered.
+
+\subsection*{Prioritized requirements}
+\begin{reqs}
+\req{T-1 Must}{Report a title made only of generic terms, and a title identical to an existing
+  lesson's title.}
+\req{T-2 Must}{Any suggested title passes LessonInputPolicy.validateTitle (at most 80
+  characters) before it is shown.}
+\req{T-3 Should}{With consent, suggest a title generated from the description.}
+\req{T-4 Should}{Without consent, or if the service fails, still show the T-1 advice, with no
+  suggestion.}
+\req{T-5 Could}{Offer up to three suggestions, one at a time, if the first is dismissed.}
+\end{reqs}
+
+\toolbox{
+Tool & \textbf{Groq API}, free plan, with an open-weight Llama model; the service LessonShare
+already calls. \\
+Why & Turning a description into a short title is a generation task, which a rule cannot do.
+The free plan's rate limits are far above what one contributor editing a title needs. \\
+Sources & Quick start: \url{https://console.groq.com/docs/quickstart} \newline
+Free plan limits: \url{https://console.groq.com/docs/rate-limits} \\
+LessonShare & Function 13, one-line summary of a post; Function 15, consent gating (C-4). \\
+}
+
+% =======================================================================================
+\fieldhead{Keywords}{keywords}{Anirudh B}
+
+\mockup{Keywords (optional)}{12 / 200}{db, h2, conn}{Suggest keywords}{Suggested keywords
+\textperiodcentered{} click to add}{\fcolorbox{accent}{white}{H2} \fcolorbox{accent}{white}{JDBC}
+\fcolorbox{accent}{white}{file lock} \fcolorbox{accent}{white}{database connection}\par\smallskip
+``db'' and ``conn'': other lessons use ``database'' and ``connection''.}{Replace}{Dismiss}{5.2}
+
+\subsection*{Concept of operations}
+Pressing Suggest keywords runs KeyBERT on the title and description. KeyBERT embeds the text and
+its candidate words and phrases with the all-MiniLM-L6-v2 model and keeps the five phrases
+closest in meaning to the whole text. Each suggestion is shown as a chip; clicking it appends it
+to the field in the standard ``first, second'' form. Separately, every keyword already typed is
+compared with the keywords used by stored lessons; when a stored keyword is the long form of a
+typed abbreviation, a Replace action is offered. The model runs on the team's machine as a small
+local helper, so no text is sent to a third party and C-4 does not apply.
+
+\subsection*{Prioritized requirements}
+\begin{reqs}
+\req{K-1 Must}{Suggest at most five keywords drawn from the title and description.}
+\req{K-2 Must}{Never suggest a keyword already in the field, ignoring case, and never let the
+  field exceed the CS-11 limits (10 keywords, 30 characters each, 200 in total).}
+\req{K-3 Should}{Prefer keywords already used by stored lessons when two candidates mean the
+  same thing, so searches find both lessons.}
+\req{K-4 Should}{Offer to replace an abbreviation with the form stored lessons use.}
+\req{K-5 Could}{Prefer two-word technical phrases (``file lock'') to single common words.}
+\end{reqs}
+
+\toolbox{
+Tool & \textbf{KeyBERT}, MIT licence, keyword extraction with BERT embeddings, run locally
+with the all-MiniLM-L6-v2 model. \\
+Why & Unsupervised: it needs no training data, which matters while the lesson store is small.
+K-5 maps onto its keyphrase length setting. \\
+Sources & Documentation: \url{https://maartengr.github.io/KeyBERT/} \newline
+Source and licence: \url{https://github.com/MaartenGr/KeyBERT} \\
+LessonShare & Function 14, AI keyword suggestions for a search; here applied when the lesson is
+written rather than when it is searched. \\
+}
+
+% =======================================================================================
+\fieldhead{Category}{category}{Pranjal Ganvir}
+
+\mockup{Category}{8 / 30}{DB stuff}{Suggest category}{Did you mean an existing
+category?}{``DB stuff'' is closest to \textbf{Database}, used by 6 stored lessons (similarity
+0.71). Using the same category keeps these lessons together in the category
+filter.}{Use Database}{Keep mine}{5.0}
+
+\subsection*{Concept of operations}
+When the contributor leaves the Category field, the typed category and every category returned
+by LessonsLearnedList.getCategories are turned into sentence embeddings with the
+all-MiniLM-L6-v2 model, run in the Java application through the Deep Java Library. The closest
+existing category by cosine similarity is offered when its score is at least 0.6 and it is not
+already the typed value. Below the threshold nothing is shown, because the contributor may be
+starting a genuinely new category. An exact match ignoring case (``database'' for
+``Database'') is corrected to the stored spelling with no model call.
+
+\subsection*{Prioritized requirements}
+\begin{reqs}
+\req{G-1 Must}{Offer the stored spelling when the typed category differs from an existing one
+  only in case or surrounding spaces.}
+\req{G-2 Must}{Offer the single closest existing category when its similarity is at least the
+  threshold; show nothing otherwise.}
+\req{G-3 Should}{Show how many stored lessons use the suggested category.}
+\req{G-4 Should}{Keep the typed category when the contributor chooses Keep mine, and do not ask
+  again for that lesson.}
+\req{G-5 Could}{Let staff adjust the threshold in TP3, after real categories have been
+  collected.}
+\end{reqs}
+
+\toolbox{
+Tool & \textbf{Sentence Transformers} model all-MiniLM-L6-v2 (Apache-2.0), run in Java with the
+\textbf{Deep Java Library} (Apache-2.0). \\
+Why & The task is semantic similarity between short phrases, which is what this model is
+trained for; it is small enough to run on a laptop, so no category text leaves the application. \\
+Sources & Model and licence: \url{https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2}
+\newline
+Similarity method: \url{https://sbert.net/docs/sentence_transformer/usage/semantic_textual_similarity.html}
+\newline
+Running it from Java: \url{https://djl.ai/} \\
+LessonShare & LessonShare offers no category coaching; this extends its keyword-suggestion idea
+(function 14) to the category field. \\
+}
+
+\section*{Sources}
+LessonShare v3a and each member's HW2 evaluation of it (functions numbered as in the
+evaluation). All other sources are listed with their URL in the section that uses them; every
+URL was checked on October 25, 2026.
+
+\end{document}

@@ -1,0 +1,79 @@
+\documentclass[10pt]{article}
+\usepackage{tp2style}
+\hypersetup{pdftitle={Plan and Status 2026-10-14},pdfauthor={CSE 360 Team 24}}
+\fancyfoot[L]{\sffamily\scriptsize\color{muted}Plan and Status 2026-10-14 \textperiodcentered{} Team 24}
+\newcommand{\member}[2]{\par\smallskip{\sffamily\bfseries #1}\quad{\sffamily\small\color{muted}#2}
+\begin{description}[leftmargin=9.5em,labelwidth=9em,labelsep=0.5em,style=sameline,font=\sffamily\small\color{muted},itemsep=0pt]}
+\begin{document}
+\doctitle{Plan and Status 2026-10-14}{\team \\ Standup: Wednesday, 2026-10-14 \textperiodcentered{} Status Summary presenter: Karan Patel}
+
+\section*{Task board}
+{\small\color{muted}2 done \textperiodcentered{} 7 in progress \textperiodcentered{} 19 to do.
+Planned done dates are the dates agreed when each task was added.}
+
+\begin{small}
+\begin{longtable}{@{}p{0.47\linewidth} p{0.19\linewidth} p{0.13\linewidth} l@{}}
+\toprule
+\textbf{Task} & \textbf{Owner} & \textbf{Status} & \textbf{Planned done} \\
+\midrule
+\endhead
+Contributor requirements list CS-1 to CS-12 & Arush & \Done & 2026-10-13 \\
+TP2 Team Norms (tracked changes) & Arush & \Done & 2026-10-13 \\
+LessonsLearned entity class & Arush & \Doing & 2026-10-16 \\
+LessonsLearnedList entity class & Anirudh & \Doing & 2026-10-18 \\
+LessonsLearnedDatabase (table, CRUD) & Karan & \Doing & 2026-10-16 \\
+LessonInputPolicy (HW2 length fix, keywords) & Pranjal & \Doing & 2026-10-16 \\
+AICoaching.pdf: one field per member & All five & \Doing & 2026-10-19 \\
+FoundationsMain: open the lessons table & Arush & \ToDo & 2026-10-16 \\
+guiLessonsList (Model, View, Controller) & Karan & \ToDo & 2026-10-20 \\
+guiLessonEditor (Model, View, Controller) & Moksha & \Doing & 2026-10-20 \\
+guiLessonDetail (Model, View, Controller) & Moksha & \ToDo & 2026-10-21 \\
+Lessons Learned button on Role1 and Role2 home & Anirudh & \ToDo & 2026-10-19 \\
+Clean compile of the whole project & Arush & \ToDo & 2026-10-20 \\
+Validation suite VAL-01 to VAL-25 & Pranjal & \Doing & 2026-10-21 \\
+CRUD suite CRUD-01 to CRUD-12 & Anirudh & \ToDo & 2026-10-21 \\
+List suite LIST-01 to LIST-10 & Anirudh & \ToDo & 2026-10-22 \\
+GUI Model suite MOD-01 to MOD-16 & Karan & \ToDo & 2026-10-22 \\
+TP2TestRunner (all suites, one run) & Pranjal & \ToDo & 2026-10-22 \\
+Requirements to Tests Map & Pranjal & \ToDo & 2026-10-23 \\
+Lessons\_Learned\_Javadocs and screenshots & Arush & \ToDo & 2026-10-23 \\
+Contributor\_Javadocs and screenshots & Karan, Moksha & \ToDo & 2026-10-23 \\
+ContributorTests\_Javadocs and screenshots & Anirudh, Pranjal & \ToDo & 2026-10-23 \\
+LessonsLearnedScreencast & Arush, Anirudh & \ToDo & 2026-10-25 \\
+PhaseTwoGUIScreencast & Karan, Moksha & \ToDo & 2026-10-25 \\
+TestingScreencast & Pranjal, Anirudh & \ToDo & 2026-10-25 \\
+Six Status Summary screencasts & Presenter of each & \ToDo & 2026-10-25 \\
+Checklist, ZIP, noon safety upload & Arush & \ToDo & 2026-10-26 \\
+Peer evaluation and Canvas receipt & All five & \ToDo & 2026-10-26 \\
+\bottomrule
+\end{longtable}
+\end{small}
+
+\section*{In-progress work, by member}
+\member{Arush Ugal}{LessonsLearned entity class}
+\item[Since last standup] CS-1 to CS-12 agreed by the team and Team Norms finished (both Oct 13). LessonsLearned: twelve attributes and the three constructors written and pushed.
+\item[Next standup] Write create, read, update, delete, validate, isOwnedBy, and matches.
+\item[Blocking] None.
+\end{description}
+\member{Karan Patel}{LessonsLearnedDatabase (table, CRUD)}
+\item[Since last standup] CREATE TABLE and the six ALTER TABLE ADD COLUMN IF NOT EXISTS statements written; connectToDatabase(url) overload added for in-memory test databases.
+\item[Next standup] addLesson with generated keys, getAllLessons ordered by id descending, getLessonById, updateLesson, deleteLesson, deleteAllLessons, getNumberOfLessons.
+\item[Blocking] None.
+\end{description}
+\member{Anirudh B}{LessonsLearnedList entity class}
+\item[Since last standup] Method signatures for LessonsLearnedList written against Arush's pushed constructors; Keywords research narrowed to KeyBERT.
+\item[Next standup] Implement readAll, createLesson, and deleteLesson, then the subsets.
+\item[Blocking] None.
+\end{description}
+\member{Pranjal Ganvir}{LessonInputPolicy (HW2 length fix, keywords); Validation suite VAL-01 to VAL-25}
+\item[Since last standup] Wrote VAL-12 (300-character description); it failed as expected. Root cause: InputLimits.checkLength stops at 256. Added LessonInputPolicy.checkLongText for the two long fields; VAL-12 now passes. Keyword rules drafted.
+\item[Next standup] Finish keyword validation; write VAL cases for every field's required and length rules.
+\item[Blocking] None.
+\end{description}
+\member{Moksha Dev}{guiLessonEditor (Model, View, Controller); AICoaching.pdf: one field per member}
+\item[Since last standup] Paper sketches of the editor and detail pages done; both fit 800 by 600 with the Foundations absolute-position Pane layout. Resolution field concept drafted.
+\item[Next standup] Start ViewLessonEditor once LessonsLearned is finished.
+\item[Blocking] None.
+\end{description}
+
+\end{document}

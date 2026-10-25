@@ -1,0 +1,79 @@
+\documentclass[10pt]{article}
+\usepackage{tp2style}
+\hypersetup{pdftitle={Plan and Status 2026-10-16},pdfauthor={CSE 360 Team 24}}
+\fancyfoot[L]{\sffamily\scriptsize\color{muted}Plan and Status 2026-10-16 \textperiodcentered{} Team 24}
+\newcommand{\member}[2]{\par\smallskip{\sffamily\bfseries #1}\quad{\sffamily\small\color{muted}#2}
+\begin{description}[leftmargin=9.5em,labelwidth=9em,labelsep=0.5em,style=sameline,font=\sffamily\small\color{muted},itemsep=0pt]}
+\begin{document}
+\doctitle{Plan and Status 2026-10-16}{\team \\ Standup: Friday, 2026-10-16 \textperiodcentered{} Status Summary presenter: Anirudh B}
+
+\section*{Task board}
+{\small\color{muted}6 done \textperiodcentered{} 7 in progress \textperiodcentered{} 15 to do.
+Planned done dates are the dates agreed when each task was added.}
+
+\begin{small}
+\begin{longtable}{@{}p{0.47\linewidth} p{0.19\linewidth} p{0.13\linewidth} l@{}}
+\toprule
+\textbf{Task} & \textbf{Owner} & \textbf{Status} & \textbf{Planned done} \\
+\midrule
+\endhead
+Contributor requirements list CS-1 to CS-12 & Arush & \Done & 2026-10-13 \\
+TP2 Team Norms (tracked changes) & Arush & \Done & 2026-10-13 \\
+LessonsLearned entity class & Arush & \Done & 2026-10-16 \\
+LessonsLearnedList entity class & Anirudh & \Doing & 2026-10-18 \\
+LessonsLearnedDatabase (table, CRUD) & Karan & \Done & 2026-10-16 \\
+LessonInputPolicy (HW2 length fix, keywords) & Pranjal & \Done & 2026-10-16 \\
+AICoaching.pdf: one field per member & All five & \Doing & 2026-10-19 \\
+FoundationsMain: open the lessons table & Arush & \Done & 2026-10-16 \\
+guiLessonsList (Model, View, Controller) & Karan & \Doing & 2026-10-20 \\
+guiLessonEditor (Model, View, Controller) & Moksha & \Doing & 2026-10-20 \\
+guiLessonDetail (Model, View, Controller) & Moksha & \ToDo & 2026-10-21 \\
+Lessons Learned button on Role1 and Role2 home & Anirudh & \Doing & 2026-10-19 \\
+Clean compile of the whole project & Arush & \Doing & 2026-10-20 \\
+Validation suite VAL-01 to VAL-25 & Pranjal & \Doing & 2026-10-21 \\
+CRUD suite CRUD-01 to CRUD-12 & Anirudh & \ToDo & 2026-10-21 \\
+List suite LIST-01 to LIST-10 & Anirudh & \ToDo & 2026-10-22 \\
+GUI Model suite MOD-01 to MOD-16 & Karan & \ToDo & 2026-10-22 \\
+TP2TestRunner (all suites, one run) & Pranjal & \ToDo & 2026-10-22 \\
+Requirements to Tests Map & Pranjal & \ToDo & 2026-10-23 \\
+Lessons\_Learned\_Javadocs and screenshots & Arush & \ToDo & 2026-10-23 \\
+Contributor\_Javadocs and screenshots & Karan, Moksha & \ToDo & 2026-10-23 \\
+ContributorTests\_Javadocs and screenshots & Anirudh, Pranjal & \ToDo & 2026-10-23 \\
+LessonsLearnedScreencast & Arush, Anirudh & \ToDo & 2026-10-25 \\
+PhaseTwoGUIScreencast & Karan, Moksha & \ToDo & 2026-10-25 \\
+TestingScreencast & Pranjal, Anirudh & \ToDo & 2026-10-25 \\
+Six Status Summary screencasts & Presenter of each & \ToDo & 2026-10-25 \\
+Checklist, ZIP, noon safety upload & Arush & \ToDo & 2026-10-26 \\
+Peer evaluation and Canvas receipt & All five & \ToDo & 2026-10-26 \\
+\bottomrule
+\end{longtable}
+\end{small}
+
+\section*{In-progress work, by member}
+\member{Arush Ugal}{Clean compile of the whole project}
+\item[Since last standup] LessonsLearned finished (CRUD, validation, ownership, search). FoundationsMain now opens the lessons table after the user tables; both connections work together.
+\item[Next standup] Clean compile against the JavaFX module path and the H2 jar; then start the Task 3 Javadoc.
+\item[Blocking] None.
+\end{description}
+\member{Karan Patel}{guiLessonsList (Model, View, Controller); AICoaching.pdf: one field per member}
+\item[Since last standup] LessonsLearnedDatabase finished, all seven methods. Started ModelLessonsList and the ViewLessonsList layout. Title field concept drafted for AICoaching.
+\item[Next standup] Finish guiLessonsList: search, category filter, Only my lessons, New Lesson, Open, Back, Quit.
+\item[Blocking] None.
+\end{description}
+\member{Anirudh B}{LessonsLearnedList entity class; Lessons Learned button on Role1 and Role2 home}
+\item[Since last standup] LessonsLearnedList: readAll, createLesson, deleteLesson done; searchByText and filterByCategory in progress.
+\item[Next standup] Finish the list class; add the Lessons Learned button to the Role1 and Role2 home pages.
+\item[Blocking] None.
+\end{description}
+\member{Pranjal Ganvir}{Validation suite VAL-01 to VAL-25; AICoaching.pdf: one field per member}
+\item[Since last standup] LessonInputPolicy finished; the first 12 VAL cases pass. AICoaching: Description, Resolution, and Category sections drafted with mockups.
+\item[Next standup] Collect the Title and Keywords sections; extend the VAL suite.
+\item[Blocking] Waiting for the Title and Keywords drafts (Karan, Anirudh), due Oct 18.
+\end{description}
+\member{Moksha Dev}{guiLessonEditor (Model, View, Controller)}
+\item[Since last standup] ViewLessonEditor laid out with a character counter under every field; contributor shown as a label, not a field.
+\item[Next standup] ControllerLessonEditor and ModelLessonEditor: save, cancel, ownership check.
+\item[Blocking] None.
+\end{description}
+
+\end{document}

@@ -1,0 +1,79 @@
+\documentclass[10pt]{article}
+\usepackage{tp2style}
+\hypersetup{pdftitle={Plan and Status 2026-10-19},pdfauthor={CSE 360 Team 24}}
+\fancyfoot[L]{\sffamily\scriptsize\color{muted}Plan and Status 2026-10-19 \textperiodcentered{} Team 24}
+\newcommand{\member}[2]{\par\smallskip{\sffamily\bfseries #1}\quad{\sffamily\small\color{muted}#2}
+\begin{description}[leftmargin=9.5em,labelwidth=9em,labelsep=0.5em,style=sameline,font=\sffamily\small\color{muted},itemsep=0pt]}
+\begin{document}
+\doctitle{Plan and Status 2026-10-19}{\team \\ Standup: Monday, 2026-10-19 \textperiodcentered{} Status Summary presenter: Moksha Dev}
+
+\section*{Task board}
+{\small\color{muted}11 done \textperiodcentered{} 9 in progress \textperiodcentered{} 8 to do.
+Planned done dates are the dates agreed when each task was added.}
+
+\begin{small}
+\begin{longtable}{@{}p{0.47\linewidth} p{0.19\linewidth} p{0.13\linewidth} l@{}}
+\toprule
+\textbf{Task} & \textbf{Owner} & \textbf{Status} & \textbf{Planned done} \\
+\midrule
+\endhead
+Contributor requirements list CS-1 to CS-12 & Arush & \Done & 2026-10-13 \\
+TP2 Team Norms (tracked changes) & Arush & \Done & 2026-10-13 \\
+LessonsLearned entity class & Arush & \Done & 2026-10-16 \\
+LessonsLearnedList entity class & Anirudh & \Done & 2026-10-18 \\
+LessonsLearnedDatabase (table, CRUD) & Karan & \Done & 2026-10-16 \\
+LessonInputPolicy (HW2 length fix, keywords) & Pranjal & \Done & 2026-10-16 \\
+AICoaching.pdf: one field per member & All five & \Done & 2026-10-19 \\
+FoundationsMain: open the lessons table & Arush & \Done & 2026-10-16 \\
+guiLessonsList (Model, View, Controller) & Karan & \Done & 2026-10-20 \\
+guiLessonEditor (Model, View, Controller) & Moksha & \Done & 2026-10-20 \\
+guiLessonDetail (Model, View, Controller) & Moksha & \Doing & 2026-10-21 \\
+Lessons Learned button on Role1 and Role2 home & Anirudh & \Done & 2026-10-19 \\
+Clean compile of the whole project & Arush & \Doing & 2026-10-20 \\
+Validation suite VAL-01 to VAL-25 & Pranjal & \Doing & 2026-10-21 \\
+CRUD suite CRUD-01 to CRUD-12 & Anirudh & \Doing & 2026-10-21 \\
+List suite LIST-01 to LIST-10 & Anirudh & \Doing & 2026-10-22 \\
+GUI Model suite MOD-01 to MOD-16 & Karan & \Doing & 2026-10-22 \\
+TP2TestRunner (all suites, one run) & Pranjal & \Doing & 2026-10-22 \\
+Requirements to Tests Map & Pranjal & \Doing & 2026-10-23 \\
+Lessons\_Learned\_Javadocs and screenshots & Arush & \ToDo & 2026-10-23 \\
+Contributor\_Javadocs and screenshots & Karan, Moksha & \Doing & 2026-10-23 \\
+ContributorTests\_Javadocs and screenshots & Anirudh, Pranjal & \ToDo & 2026-10-23 \\
+LessonsLearnedScreencast & Arush, Anirudh & \ToDo & 2026-10-25 \\
+PhaseTwoGUIScreencast & Karan, Moksha & \ToDo & 2026-10-25 \\
+TestingScreencast & Pranjal, Anirudh & \ToDo & 2026-10-25 \\
+Six Status Summary screencasts & Presenter of each & \ToDo & 2026-10-25 \\
+Checklist, ZIP, noon safety upload & Arush & \ToDo & 2026-10-26 \\
+Peer evaluation and Canvas receipt & All five & \ToDo & 2026-10-26 \\
+\bottomrule
+\end{longtable}
+\end{small}
+
+\section*{In-progress work, by member}
+\member{Arush Ugal}{Clean compile of the whole project}
+\item[Since last standup] Reviewed the nine new GUI classes. Fixed two import paths in guiLessonsList and the opens lines in module-info.java.
+\item[Next standup] Finish the clean compile; start the Task 3 Javadoc.
+\item[Blocking] None.
+\end{description}
+\member{Karan Patel}{GUI Model suite MOD-01 to MOD-16; Contributor\_Javadocs and screenshots}
+\item[Since last standup] guiLessonsList finished (Oct 19). AICoaching Title section delivered. Started the GUI Model suite and the Task 4 package screenshots.
+\item[Next standup] MOD cases for the list, editor, and detail Models.
+\item[Blocking] None.
+\end{description}
+\member{Anirudh B}{CRUD suite CRUD-01 to CRUD-12; List suite LIST-01 to LIST-10}
+\item[Since last standup] LessonsLearnedList finished (Oct 18); Lessons Learned button on both home pages (Oct 19). CRUD suite first run: 10 of 12 pass. CRUD-02 and CRUD-06 failed because create and update wrote the row without checking validate's result; Arush fixed both on the same day.
+\item[Next standup] Rerun CRUD; write the List suite.
+\item[Blocking] None.
+\end{description}
+\member{Pranjal Ganvir}{Validation suite VAL-01 to VAL-25; TP2TestRunner (all suites, one run); Requirements to Tests Map}
+\item[Since last standup] AICoaching.pdf assembled from the five sections (Oct 19). VAL suite at 18 cases, all passing.
+\item[Next standup] Finish VAL to 25 cases; write TP2TestRunner; start the Requirements to Tests Map.
+\item[Blocking] None.
+\end{description}
+\member{Moksha Dev}{guiLessonDetail (Model, View, Controller); Contributor\_Javadocs and screenshots}
+\item[Since last standup] guiLessonEditor finished (Oct 19). ViewLessonDetail laid out; Edit and Delete disabled for non-contributors.
+\item[Next standup] ControllerLessonDetail with delete confirmation, and ModelLessonDetail.
+\item[Blocking] None.
+\end{description}
+
+\end{document}
