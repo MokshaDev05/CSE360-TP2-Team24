@@ -1,0 +1,295 @@
+% Spoken scripts for the three main screencasts.  Included by screencast_guide.tex.
+% \act{...}  what the presenter does on screen (not spoken)
+% \say{...}  what the presenter says
+
+\clearpage
+\section*{Script: LessonsLearnedScreencast}
+\scriptmeta{Target 6 minutes (allowed 5--10). Arush Ugal about 3.5 minutes, then Anirudh B about
+2.5 minutes. Before recording: open \texttt{Lessons\_Learned\_Javadocs/index.html} in Chrome at 125\%,
+open the folder in Finder, and open this guide at the Task 3 table.}
+
+\speaker{Arush Ugal}{about 3.5 minutes}
+
+\act{Show this guide, the ``LessonsLearnedScreencast: Task 3 items'' table.}
+\say{This is the LessonsLearned screencast for Team 24. I'm Arush Ugal, and I'm presenting with
+Anirudh B. We're showing the Lessons\_Learned\_Javadocs folder, which documents the two entity
+classes, LessonsLearned and LessonsLearnedList. This table is the list of deliverable
+requirements, 3.1 to 3.5, and next to each one are the HTML pages and screenshots that satisfy
+it. We'll go through them in that order.}
+
+\act{Open \texttt{3.1-entityClasses-package-source-tree.png}, then
+\texttt{3.1-entityClasses-package-declarations.png}, then \texttt{3.1-entityClasses-package-summary-javadoc.png}.}
+\say{Requirement 3.1 is that both classes are in the entityClasses package. The first screenshot
+is the source tree: LessonsLearned.java and LessonsLearnedList.java sit in entityClasses, next
+to the supplied User class. The second shows line 1 of each file, ``package entityClasses''. The
+third is the generated package page, which lists both classes and describes what the package
+is for.}
+
+\act{Open \texttt{entityClasses/LessonsLearned.html}; scroll through the class description.}
+\say{This is the Javadoc for LessonsLearned. One object is one lesson. The description says what
+the class is for, why three attributes are stored now for TP3, and then a list that maps each
+Contributor requirement, CS-1 to CS-12, to the method that implements it. That mapping is
+requirement 3.4. The screenshot \texttt{3.4-LessonsLearned-class-javadoc.png} shows the same text in the
+source.}
+
+\act{Scroll to Field Summary; open \texttt{3.3-LessonsLearned-attributes-contributor-stories.png}
+and \texttt{3.3-LessonsLearned-attributes-TP3-epics.png}.}
+\say{Requirement 3.3 is the attributes. The Field Summary lists all twelve, including the
+private ones, because the Javadoc was generated with the private option. In the source, each
+attribute starts with ``Source'', the requirement it comes from, and then the reason it's stored
+that way. For example, contributor comes from CS-1, CS-6, and CS-9: it's taken from the logged-in
+user and never typed, so nobody can post as someone else. The second screenshot shows the three
+TP3 attributes: review status, reviewer comment, and helpful count. We store them now so the
+table doesn't have to change once it already holds lessons.}
+
+\act{Scroll to Method Summary; open the three \texttt{3.2-LessonsLearned-*} screenshots in turn.}
+\say{Requirement 3.2 is CRUD. Create validates first, refuses a lesson that's already stored,
+sets both dates, and writes the row. Read is static, because there's no object until the row is
+read. Update runs the same validation as create, and if the write fails it puts the old date
+back, so the object never claims a change the database doesn't have. Delete sets the id back to
+minus one. Validate is the single call that both create and update make.}
+
+\act{Open \texttt{3.4-LessonsLearned-constructors.png}, then the two \texttt{3.5-LessonsLearned-*} screenshots.}
+\say{There are two constructors: one for a new lesson, with no id and no dates, and one for a
+row read back from the database. Requirement 3.5 is comments that explain code that isn't
+obvious. This block explains why there's no setter for the contributor, the dates, or the TP3
+attributes. And this one explains why isOwnedBy compares exactly, and why an empty search term
+matches nothing. Anirudh will now cover LessonsLearnedList.}
+
+\speaker{Anirudh B}{about 2.5 minutes}
+
+\act{Open \texttt{entityClasses/LessonsLearnedList.html}, then \texttt{3.4-LessonsLearnedList-class-javadoc.png}
+and \texttt{3.3-LessonsLearnedList-attribute.png}.}
+\say{I'm Anirudh. LessonsLearnedList holds a list of lessons. readAll gives the persistent list
+of every lesson in the system, and every other list is a subset of it. The class Javadoc explains
+why a subset comes back as another LessonsLearnedList: you can narrow it again, count it, or show
+it with the same code. It has one attribute, an ArrayList, declared final, with its source and
+rationale written above it.}
+
+\act{Open the two \texttt{3.2-LessonsLearnedList-*} screenshots and \texttt{3.2-LessonsLearnedDatabase-addLesson.png}.}
+\say{For requirement 3.2, the list's CRUD is readAll, createLesson, updateLesson, and deleteLesson.
+Each one writes to the database first and changes the in-memory list only if the write succeeded.
+Underneath is LessonsLearnedDatabase. addLesson uses a PreparedStatement and reads back the key
+the database generated.}
+
+\act{Open \texttt{3.4-LessonsLearnedList-subsets.png} and \texttt{3.4-LessonsLearnedList-contributor-and-categories.png}.}
+\say{These are the subsets: search, which covers title, description, and keywords and ignores
+case; filter by category; filter by contributor, which uses the same isOwnedBy test as the
+ownership rule; and getCategories, which fills the category filter on the list page.}
+
+\act{Open the \texttt{3.5-LessonsLearnedDatabase-*}, \texttt{3.5-LessonInputPolicy-*}, and \texttt{3.5-LessonsLearnedList-getAll-returns-copy.png} screenshots.}
+\say{The rest of requirement 3.5 is here. createTables explains why the new columns are added
+with ALTER TABLE rather than in the CREATE statement. moveLegacyTableAside fixes a defect we
+found: an HW2 table with different columns made every save fail with ``Column DESCRIPTION not
+found''. Now that table is renamed and kept, never dropped. getAllLessons orders by id rather
+than by date. updateLesson's comment explains which columns an edit can't change. checkLongText
+records the HW2 defect that refused any description over 256 characters. And getAll returns a
+copy, so a caller can't change the list behind its back. That's the Lessons\_Learned\_Javadocs
+folder. Thanks for watching.}
+
+% =====================================================================================
+\clearpage
+\section*{Script: PhaseTwoGUIScreencast}
+\scriptmeta{Target 9 minutes (allowed 5--10). Karan Patel about 4.5 minutes (guiLessonsList and
+the overall structure), then Moksha Dev about 4.5 minutes (guiLessonEditor and guiLessonDetail).
+Before recording: open \texttt{Contributor\_Javadocs/index.html}, the folder in Finder, and this
+guide at the Task 4 table. Have the application running for Moksha's last part.}
+
+\speaker{Karan Patel}{about 4.5 minutes}
+
+\act{Show this guide, the ``PhaseTwoGUIScreencast: Task 4 items'' table.}
+\say{This is the Phase Two GUI screencast for Team 24. I'm Karan Patel, presenting with Moksha
+Dev. We're showing the Contributor\_Javadocs folder. This table lists the five deliverable
+requirements, 4.1 to 4.5, and next to each one the HTML pages and screenshot names that cover
+it.}
+
+\act{Open \texttt{4.1-Contributor-packages-overview-javadoc.png}, \texttt{4.1-gui-packages-source-tree.png},
+then the three \texttt{4.1-*-package-classes-javadoc.png}.}
+\say{For requirement 4.1 there are three new packages: guiLessonsList, guiLessonEditor, and
+guiLessonDetail. They're named the same way as the supplied packages, like guiUserLogin and
+guiRole1. The source tree shows each package has exactly three classes, a Model, a View, and a
+Controller. The tree also marks the two home pages that got a Lessons Learned button. These
+package pages list the classes in each one.}
+
+\act{Open \texttt{4.2-guiLessonsList-View-wires-Controller.png}.}
+\say{Requirement 4.2 is that we use MVC the way Foundations does. In the View's constructor,
+every control gets a setOnAction that calls a Controller method: Search, Show All, the category
+box, Only my lessons, New Lesson, Open, Back, and Quit. The View doesn't make any decisions.}
+
+\act{Open \texttt{4.2-guiLessonsList-Controller-asks-Model.png}.}
+\say{The Controller reads the controls, asks ModelLessonsList what to show and what the status
+line should say, and puts the answer on screen. One difference from the supplied packages: there
+the Model is empty, but ours holds data, because this page narrows a list and has to explain the
+result. It has no JavaFX in it, so the tests can check its decisions directly.}
+
+\act{Open \texttt{guiLessonsList/ModelLessonsList.html}, scroll to the Field Summary; then
+\texttt{4.4-ModelLessonsList-attributes.png}, \texttt{4.4-ViewLessonsList-attributes.png}, and the three
+\texttt{4.4-*LessonsList-class-javadoc.png}.}
+\say{Requirement 4.4 is documenting purpose, attributes, and operations. ModelLessonsList has two
+attributes, the full list and the subset on screen, each with its source requirement. The View's
+attributes are the widgets, grouped by area. The class Javadoc for each of the three says what
+the class is for, its role in MVC, and which requirements it supports: CS-2, CS-3, CS-4, CS-5,
+and CS-6, plus the entry point to CS-1.}
+
+\act{Open \texttt{4.5-ModelLessonsList-applyFilters.png}, \texttt{4.5-ModelLessonsList-statusMessage.png},
+\texttt{4.5-ControllerLessonsList-reloadLessons-fillCategories.png}.}
+\say{Requirement 4.5 is comments that explain code that isn't obvious. applyFilters explains why
+an empty search box shows every lesson on this page, while the list class treats an empty term as
+matching nothing. statusMessage explains why an empty result is described in words that name the
+filter, so the user knows which filter to change. reloadLessons explains why the page re-reads the
+database instead of keeping what's in memory: that's how lessons from an earlier run show up.}
+
+\act{Open \texttt{4.4-guiRole1-Lessons-Learned-button.png} and the two \texttt{performLessonsLearned} screenshots.}
+\say{The way in is the Lessons Learned button on the Role1 and Role2 home pages. Each one calls
+performLessonsLearned, which passes the current stage and user along, so Back returns to the right
+home page. Moksha will now cover the editor and the detail page.}
+
+\speaker{Moksha Dev}{about 4.5 minutes}
+
+\act{Open \texttt{guiLessonEditor/package-summary.html}, \texttt{4.4-guiLessonEditor-package-info.png},
+\texttt{4.2-guiLessonEditor-View-and-Controller.png}.}
+\say{I'm Moksha. guiLessonEditor is one page used for both a new lesson and an edit, because the
+fields and rules are the same. The package description lists the requirements it covers: CS-1,
+CS-7, CS-9, and the on-screen side of CS-10 and CS-11. For MVC, pressing Save Lesson calls
+performSave in the Controller. That reads the fields, calls the Model, and if a field is refused,
+shows it in a ValidationAlert.}
+
+\act{Open \texttt{4.4-ViewLessonEditor-attributes.png}, \texttt{4.4-ModelLessonEditor-class-javadoc.png}.}
+\say{Look at the View's attributes: the contributor is a Label, not a TextField, so it can't be
+typed. Each field has a character counter for the CS-11 limits.}
+
+\act{Open \texttt{4.5-ModelLessonEditor-saveNewLesson.png}, \texttt{4.5-ModelLessonEditor-saveChanges.png},
+\texttt{4.5-ModelLessonEditor-tidyKeywords.png}.}
+\say{For 4.5, saveNewLesson records why the contributor comes from the login: in HW2 it was a
+text field, and that let anyone post in someone else's name. saveChanges checks ownership again,
+even though the page only offers Edit to the contributor. It refuses an untouched form, and it
+changes a copy rather than the original, so a refused save can't leave the list showing values
+the database doesn't have. tidyKeywords drops duplicates but keeps an empty entry, so validation
+can report it instead of the editor quietly changing what was typed.}
+
+\act{Open \texttt{guiLessonDetail/package-summary.html}, \texttt{4.4-ViewLessonDetail-attributes.png},
+\texttt{4.4-ViewLessonDetail-displayLessonDetail.png}, \texttt{4.4-ModelLessonDetail-canChange-ownershipNote.png}.}
+\say{guiLessonDetail shows one lesson in full, which is CS-3, including the TP3 review line as
+read-only. displayLessonDetail turns Edit and Delete on only for the contributor. The rule comes
+from canChange in the Model, and ownershipNote explains on screen whose lesson it is. That's
+CS-9.}
+
+\act{Open \texttt{4.2-guiLessonDetail-View-and-Controller.png} and \texttt{4.5-ModelLessonDetail-deleteLesson.png}.}
+\say{Delete Lesson calls performDelete, which asks for confirmation before it calls the Model.
+That's CS-8. In deleteLesson, the comment explains why ownership is checked again in the Model:
+the button is already disabled, but no other route to this method should be able to get around
+the rule.}
+
+\act{Open \texttt{4.5-FoundationsMain-lessonsDatabase.png}; then switch to the running application,
+open the list, a lesson, and the editor for about 30 seconds.}
+\say{Finally, FoundationsMain opens the lessons table when the application starts, and the
+comment explains why a second connection to the same file doesn't trigger the ``already in use''
+alert. Here are the three pages running: the list with search and filters, the detail page with
+Edit and Delete, and the editor with its counters. That's the Contributor\_Javadocs folder.
+Thanks for watching.}
+
+% =====================================================================================
+\clearpage
+\section*{Script: TestingScreencast}
+\scriptmeta{Target 12 minutes (allowed 8--15). Pranjal Ganvir about 6.5 minutes (the map, the
+test documentation, and the Validation and CRUD runs), then Anirudh B about 5.5 minutes (List and
+Model runs, totals, and the manual procedures). Before recording: open
+\texttt{Requirements to Tests Map.pdf}, \texttt{ContributorTests\_Javadocs/index.html}, Eclipse with
+the project, and the application ready to start with an empty database. In Eclipse, increase the
+console font so the Pass lines can be read.}
+
+\speaker{Pranjal Ganvir}{about 6.5 minutes}
+
+\act{Show this guide, the ``TestingScreencast: Task 7 items'' table, then
+\texttt{Requirements to Tests Map.pdf} pages 1 and 2.}
+\say{This is the Testing screencast for Team 24. I'm Pranjal Ganvir, presenting with Anirudh B.
+This table is the list of deliverable requirements, 7.1 to 7.4, with the files for each. For 7.1,
+the Requirements to Tests Map lists all twelve requirements, CS-1 to CS-12. For 7.2, each row
+gives its positive tests, its negative tests, and the HTML pages that document them. Every
+requirement has at least one of each. There are seventy-nine tests: seventy-two automated tests
+in four suites, and seven manual procedures for things only a window can show.}
+
+\act{Scroll to ``Every test, its Javadoc, and its screenshot''.}
+\say{This table lists every test, its requirement, whether it's positive or negative, its method
+in the HTML page, and the name of its screenshot.}
+
+\act{Open \texttt{testingAutomation/LessonsCrudTestingAutomation.html}, Method Detail for
+\texttt{crud11And12PersistAcrossReopen()}; then \texttt{7.4-CRUD-11-CRUD-12-PersistAcrossReopen.png}.}
+\say{For 7.3, every test is its own method, and its Javadoc says three things: the requirement
+and whether the test is positive or negative, how the test works, and what output means it
+passed. This pair proves CS-12. It writes two lessons to a database file, deletes one, closes the
+connection, which is what quitting the app does, then opens a new connection to the same file,
+which is what restarting does. For 7.4, this is that method's screenshot, with the comments that
+mark the first run and the second run.}
+
+\act{Open \texttt{7.4-check-helper-and-refusedWith.png}.}
+\say{Every test prints its result through check: ``Pass'' or ``Failure'', then the test id and the
+requirement. For validation, a negative test only passes if the refusal message is the one the
+requirement calls for, so a value refused for the wrong reason counts as a Failure.}
+
+\act{In Eclipse, run \texttt{testingAutomation.TP2TestRunner}. Scroll to the Validation block.}
+\say{Here's the live run. Validation, CS-10 and CS-11. VAL-01 to VAL-05 are the title: a normal
+title passes; a blank one and one made only of spaces are refused as required; eighty characters
+passes and eighty-one is refused as too long. VAL-06 to 09 do the same for category, at thirty
+and thirty-one characters. VAL-10 to 14 are the description. VAL-12, three hundred characters,
+is the regression test for the HW2 defect that refused anything over 256. VAL-13 accepts exactly
+two thousand and VAL-14 refuses two thousand and one. VAL-15 to 17 show resolution is optional
+and capped at two thousand. VAL-18 to 21 show keywords are optional, that four short ones pass,
+that eleven are refused, and that a keyword over thirty characters is refused. VAL-22 and 23 are
+the contributor. VAL-24 accepts a complete lesson, and VAL-25 shows a whole lesson is refused when
+only its title is blank. Twenty-five passed, none failed.}
+
+\act{Scroll to the CRUD block.}
+\say{CRUD, which covers create, read, update, delete, ownership, and persistence. CRUD-01 stores a
+valid lesson, gets an id, and the row count goes up by one. CRUD-02 refuses a blank title and the
+count stays the same, so nothing was written. CRUD-03 reads that lesson back with all its fields,
+and CRUD-04 shows an unknown id returns nothing instead of an error. CRUD-05 changes the title and
+re-reads it from the database: the new title is there, and the contributor and creation date are
+unchanged. CRUD-06 refuses an update to a blank title and the stored title stays put. CRUD-07
+deletes the lesson, and CRUD-08 shows deleting it again reports false. CRUD-09 and 10 check
+ownership: the contributor is recognised; another user, the same name in different capitals, and
+a missing name are not. CRUD-11 and 12 are the restart test I just showed. CRUD-13 and 14 build
+the table layout HW2 left behind: saving now works, and the old HW2 row is kept in the renamed
+table. Fourteen of fourteen. Anirudh will take the List and Model suites.}
+
+\speaker{Anirudh B}{about 5.5 minutes}
+
+\act{Scroll to the List block.}
+\say{I'm Anirudh. The List suite works on three seeded lessons: A and B in Database, C in GUI.
+LIST-01 reads all three, and LIST-02 shows an empty database gives an empty list rather than an
+error. LIST-03 searches ``JDBC'', which only appears in keywords, and finds exactly A and B, so
+keywords are searched. LIST-04 searches a word no lesson has and gets nothing. LIST-05 filters
+the Database category, typed in lower case, and gets A and B. LIST-06 gets nothing for a category
+nobody uses. LIST-07 returns exactly Arush's two lessons, and LIST-08 nothing for an unknown
+user. LIST-09 gives the category filter its choices, Database and GUI, each once. LIST-10 chains a
+search and a filter. LIST-11 confirms newest first, C, B, A. LIST-12 shows search ignores case.
+LIST-13 shows an empty search term matches nothing at the list level. Thirteen of thirteen.}
+
+\act{Scroll to the Model block.}
+\say{The Model suite tests the decisions the three windows make. MOD-01 saves through the editor
+and checks the contributor is the logged-in user. MOD-02 refuses a blank title. MOD-03 shows that
+with no filters the page shows everything: ``Showing 2 of 2 lessons''. MOD-04 checks a user with no
+lessons is told so in words. MOD-05 and 06 are search on the page, and MOD-17 checks the no-match
+message names the search term. MOD-07 and 08 are the category filter, and MOD-18 checks the
+message names the category. MOD-09 and 10 are ``Only my lessons''. MOD-11 and 12 are the
+ownership rule behind the Edit and Delete buttons. MOD-13 saves the contributor's change; MOD-14
+refuses an edit that empties the description. MOD-15 deletes, and the lesson is gone from the
+database and the shared list. MOD-16 refuses a delete by someone else, and MOD-20 refuses their
+edit, with the stored title unchanged. MOD-19 is the message for an empty database. Twenty of
+twenty.}
+
+\act{Scroll to the combined block.}
+\say{The combined result: seventy-two tests, seventy-two passed, none failed. To make sure these
+tests can actually fail, we put three defects into a copy of the code, and six tests failed, each
+one naming the requirement that broke.}
+
+\act{Start \texttt{LessonsManualTestProcedures} beside the running application (empty database,
+users contribA and contribB already created). Carry out each procedure and type P.}
+\say{The manual procedures cover what only a window can show. MAN-01: as contribA, the empty list
+says no lessons have been recorded yet. MAN-02: in New Lesson the contributor is a label, not a
+field, and the saved lesson shows ``by contribA''. MAN-03: a blank title brings up ``The title is
+required'' and nothing is saved. MAN-04: Delete asks first; Cancel keeps the lesson and OK
+removes it. MAN-05: as contribB, Edit and Delete are disabled and the note names contribA.
+MAN-06: contribB can't find the deleted lesson. MAN-07: after quitting and restarting, the
+lesson is still there. Seven passed. That's the ContributorTests\_Javadocs folder. Thanks for
+watching.}
